@@ -52,6 +52,6 @@ public class JGlitterRestWebServicesTests extends AbstractTests {
 
     private String wsRoot() {
         // putting this here now because I removed the URL helper class
-        return "http://localhost:8080/jglitter/ws";
+        return "http://localhost:8080/javainterview/ws";
     }
 }
