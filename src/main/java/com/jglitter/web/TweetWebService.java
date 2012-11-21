@@ -6,7 +6,6 @@ import com.jglitter.domain.User;
 import com.jglitter.domain.UserNotFoundException;
 import com.jglitter.persistence.repo.TweetRepository;
 import com.jglitter.persistence.repo.UserRepository;
-import com.jglitter.util.Clock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * Encapsulates RESTful web service endpoints for working with tweets.
+ */
 @Controller
 public class TweetWebService {
 
@@ -24,9 +26,13 @@ public class TweetWebService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private Clock clock;
-
+    /**
+     * Creates a new tweet by issuing an HTTP POST to {host}/{webAppContext}/tweet, returning a 200 on a successful creation.
+     *
+     * @param tweet the tweet included in the request body.
+     * @return The created tweet, marshalled into the response body.
+     * @throws UserNotFoundException When the user specified as the author of the tweet is not found in the system, resolving as a HTTP return code 404.
+     */
     @Transactional
     @RequestMapping(value = "/tweet", method = RequestMethod.POST)
     public Tweet createTweet(@RequestBody Tweet tweet) {
@@ -37,6 +43,11 @@ public class TweetWebService {
         return tweetRepository.persist(new Tweet(author, tweet.getMessage()));
     }
 
+    /**
+     * Deletes a tweet by issuing an HTTP DELETE to {host}/{webAppContext}/tweet/{tweetUuid}, return a 200 on a successful deletion.
+     *
+     * @param tweetUuid the UUID of the tweet to delete.
+     */
     @Transactional
     @RequestMapping(value = "/tweet/{tweetUuid}", method = RequestMethod.DELETE)
     public void deleteTweet(@PathVariable String tweetUuid) {
@@ -46,6 +57,12 @@ public class TweetWebService {
         }
     }
 
+    /**
+     * Finds all the tweets authored by the specified user, by issing an HTTP GET to {host}/{webAppContext}/{authorUuid}.
+     *
+     * @param authorUuid the UUID of the user who authored the tweets
+     * @return All the user's tweets, marshalled into the response body
+     */
     @Transactional(readOnly = true)
     @RequestMapping(value = "/author/{authorUuid}/tweets", method = RequestMethod.GET)
     public Tweets findTweetsAuthoredBy(@PathVariable String authorUuid) {

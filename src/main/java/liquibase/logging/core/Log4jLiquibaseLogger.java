@@ -1,9 +1,3 @@
-/*
- * Project Horizon
- *
- * (c) 2012 VMware, Inc. All rights reserved.
- * VMware Confidential.
- */
 package liquibase.logging.core;
 
 import org.apache.log4j.Logger;

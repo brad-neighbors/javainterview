@@ -11,6 +11,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.UUID;
 
+/**
+ * Encapsulates a tweet.
+ * This entity can be persisted via JPA and marshalled over the wire as XML using JAXB.
+ * Tweets are equal when their author and message are identical.
+ */
 @Entity
 @XmlRootElement
 public class Tweet extends HasPrimaryKey {
@@ -28,6 +33,12 @@ public class Tweet extends HasPrimaryKey {
     @XmlElement
     private String uuid;
 
+    /**
+     * Creates a tweet.
+     *
+     * @param author  the author of the tweet
+     * @param message the message
+     */
     public Tweet(final User author, final String message) {
         this();
         this.author = author;
@@ -35,6 +46,9 @@ public class Tweet extends HasPrimaryKey {
         this.uuid = UUID.randomUUID().toString();
     }
 
+    /**
+     * Empty constructor necessary for persitence.
+     */
     protected Tweet() {
     }
 

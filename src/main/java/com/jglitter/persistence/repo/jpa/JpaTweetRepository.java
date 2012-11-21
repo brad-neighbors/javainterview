@@ -1,9 +1,3 @@
-/*
- * Project Horizon
- *
- * (c) 2012 VMware, Inc. All rights reserved.
- * VMware Confidential.
- */
 package com.jglitter.persistence.repo.jpa;
 
 import com.jglitter.domain.Tweet;
@@ -16,21 +10,27 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 
+/**
+ * Uses JPA entity manager to persist tweets.
+ */
 @Repository
 public class JpaTweetRepository implements TweetRepository {
 
     @PersistenceContext
     private EntityManager em;
 
+    @Override
     public Tweet persist(final Tweet tweet) {
         em.persist(tweet);
         return tweet;
     }
 
+    @Override
     public Tweet findById(final Integer id) {
         return em.getReference(Tweet.class, id);
     }
 
+    @Override
     public Collection<Tweet> findAllByAuthor(final User author) {
         final TypedQuery<Tweet> query = em.createQuery("select tw from Tweet tw where tw.author = :auth", Tweet.class);
         return query.setParameter("auth", author).getResultList();

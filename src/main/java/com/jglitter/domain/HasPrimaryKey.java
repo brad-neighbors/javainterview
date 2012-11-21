@@ -5,6 +5,9 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.xml.bind.annotation.XmlTransient;
 
+/**
+ * Encapsulates a database record having a primary key.
+ */
 @MappedSuperclass
 public abstract class HasPrimaryKey {
 
