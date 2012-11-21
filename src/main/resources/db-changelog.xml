@@ -1,0 +1,46 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet id="001-add-user-table" author="Brad">
+        <createTable tableName="user">
+            <column name="id" type="integer" autoIncrement="true" >
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="user" columnNames="email"/>
+        <addUniqueConstraint tableName="user" columnNames="uuid"/>
+    </changeSet>
+
+    <changeSet id="002-add-tweet-table" author="Brad">
+        <createTable tableName="tweet">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="author_id" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(140)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="tweet" baseColumnNames="author_id"
+                                 referencedTableName="user" referencedColumnNames="id"
+                                 constraintName="FK_tweet_author"
+                                 onDelete="CASCADE"/>
+        <addUniqueConstraint tableName="tweet" columnNames="uuid"/>
+    </changeSet>
+</databaseChangeLog>
