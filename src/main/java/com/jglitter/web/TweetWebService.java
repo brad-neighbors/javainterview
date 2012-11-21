@@ -27,7 +27,7 @@ public class TweetWebService {
     private UserRepository userRepository;
 
     /**
-     * Creates a new tweet by issuing an HTTP POST to {host}/{webAppContext}/tweet, returning a 200 on a successful creation.
+     * Creates a new tweet by issuing an HTTP POST to {host}/javainterview/tweet, returning a 200 on a successful creation.
      *
      * @param tweet the tweet included in the request body.
      * @return The created tweet, marshalled into the response body.
@@ -44,7 +44,7 @@ public class TweetWebService {
     }
 
     /**
-     * Deletes a tweet by issuing an HTTP DELETE to {host}/{webAppContext}/tweet/{tweetUuid}, return a 200 on a successful deletion.
+     * Deletes a tweet by issuing an HTTP DELETE to {host}/javainterview/tweet/{tweetUuid}, return a 200 on a successful deletion.
      *
      * @param tweetUuid the UUID of the tweet to delete.
      */
@@ -58,7 +58,7 @@ public class TweetWebService {
     }
 
     /**
-     * Finds all the tweets authored by the specified user, by issing an HTTP GET to {host}/{webAppContext}/{authorUuid}.
+     * Finds all the tweets authored by the specified user, by issing an HTTP GET to {host}/javainterview/author/{authorUuid}/tweets.
      *
      * @param authorUuid the UUID of the user who authored the tweets
      * @return All the user's tweets, marshalled into the response body

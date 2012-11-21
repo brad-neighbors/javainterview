@@ -22,7 +22,7 @@ public class UserWebService {
     private UserRepository userRepository;
 
     /**
-     * Creates a new user by issuing an HTTP POST to {host}/{webAppContext}/user, returning a 200 on successful creation.
+     * Creates a new user by issuing an HTTP POST to {host}/javainterview/user, returning a 200 on successful creation.
      *
      * @param user the user to create, sent in the request body as XML
      * @return The user created, sent in the response body.
@@ -34,7 +34,7 @@ public class UserWebService {
     }
 
     /**
-     * Gets all the users by issuing an HTTP GET to {host}/{webAppContext}/user, returning a 200 on successful retrieval.
+     * Gets all the users by issuing an HTTP GET to {host}/javainterview/user, returning a 200 on successful retrieval.
      *
      * @return All the users, sent in the response body as XML.
      */
@@ -45,7 +45,7 @@ public class UserWebService {
     }
 
     /**
-     * Deletes all the users by issuing an HTTP GET to {host}/{webAppContext}/user, returning a 200 on successful deletion.
+     * Deletes all the users by issuing an HTTP DELETE to {host}/javainterview/allusers, returning a 200 on successful deletion.
      */
     @Transactional
     @RequestMapping(value = "/allusers", method = RequestMethod.DELETE)
