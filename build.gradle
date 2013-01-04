@@ -53,17 +53,10 @@ jettyRunWar {
     stopKey 'stop'
 }
 
-jettyRun {
-    daemon false
-    stopPort jettyStopPort
-    stopKey 'stop'
-}
-
 jettyStop {
     stopPort jettyStopPort
     stopKey 'stop'
 }
 
 test.dependsOn jettyRunWar
-
 
