@@ -17,6 +17,10 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+/**
+ * These tests act directly against the Repository beans, meaning it will instantiate them, an in-memory database (h2),
+ * running Liquibase to prepare the schema, etc.  These are essentially tests of user persistence: queries and inserts, etc.
+ */
 @Test
 @ContextConfiguration(classes = {Config.class})
 public class JpaUserRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {

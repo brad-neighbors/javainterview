@@ -14,6 +14,10 @@ import java.util.Collection;
 
 import static org.testng.Assert.*;
 
+/**
+ * These tests act directly against the Repository beans, meaning it will instantiate them, an in-memory database (h2),
+ * running Liquibase to prepare the schema, etc.  These are essentially tests of tweet persistence: queries and inserts, etc.
+ */
 @Test
 @ContextConfiguration(classes = {Config.class})
 public class JpaTweetRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {

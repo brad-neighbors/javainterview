@@ -30,6 +30,10 @@ import static javax.ws.rs.client.Entity.json;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+/**
+ * These tests start up an embedded Tomcat server with the Jglitter application deployed, and exercise REST calls
+ * against the REST api using JaxRS client.
+ */
 @Test
 public class RestApiTests {
 
