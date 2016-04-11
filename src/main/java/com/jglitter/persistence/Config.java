@@ -1,6 +1,5 @@
 package com.jglitter.persistence;
 
-import liquibase.Liquibase;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,6 +12,10 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 import javax.sql.DataSource;
 
+/**
+ * Spring configuration for the persistence area, includes Liquibase to perform database schema creation,
+ * entity discovery and repository component discovery.
+ */
 @Configuration
 @ComponentScan(basePackages = {"com.jglitter.persistence"})
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class})

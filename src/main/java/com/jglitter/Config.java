@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+/**
+ * Main Spring configuration entry point, depends on the web Configuration.
+ */
 @Configuration
 @Import(com.jglitter.web.Config.class)
 @EnableAutoConfiguration(

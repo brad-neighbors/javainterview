@@ -12,6 +12,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+/**
+ * Spring configuration for the Web module, setting up a Jersey Servlet for handling RESTful resources
+ * and configuring JSON marshalling.
+ */
 @Configuration
 @ComponentScan(basePackages = "com.jglitter.web")
 @Import(com.jglitter.persistence.Config.class)
