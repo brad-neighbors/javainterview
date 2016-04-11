@@ -1,30 +1,28 @@
 package com.jglitter.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.UUID;
 
 /**
  * Encapsulates a user.
- * This entity can be persisted via JPA and marshalled over the wire as XML using JAXB.
+ * This entity can be persisted via JPA and marshalled over the wire as JSON.
  * A user is unique based on their email address.
  */
 @Entity
-@XmlRootElement
 public class User extends HasPrimaryKey {
 
     @Column
-    @XmlElement
     private String email;
 
     @Column
-    @XmlElement
     private String name;
 
     @Column
-    @XmlElement
     private String uuid;
 
     /**
@@ -33,7 +31,8 @@ public class User extends HasPrimaryKey {
      * @param email the user's email address
      * @param name  the user's chosen name
      */
-    public User(final String email, final String name) {
+    @JsonCreator
+    public User(@JsonProperty("email") final String email, @JsonProperty("name") final String name) {
         this();
         this.email = email;
         this.name = name;
@@ -41,7 +40,7 @@ public class User extends HasPrimaryKey {
     }
 
     /**
-     * Empty constructor necessary for javadoc.
+     * Empty constructor necessary for persistence.
      */
     protected User() {
     }

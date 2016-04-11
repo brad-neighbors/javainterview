@@ -1,7 +1,6 @@
 package com.jglitter.domain;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import javax.ws.rs.NotFoundException;
 
 import static java.lang.String.format;
 
@@ -9,8 +8,7 @@ import static java.lang.String.format;
  * Encapsulates a runtime exception when an operation occurred expecting a user that was not found in the system.
  * Specifies a HTTP return code of 404 when thrown and handled by the default exception handler for RESTful web services.
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends NotFoundException {
 
     private final String userId;
 

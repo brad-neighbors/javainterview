@@ -2,54 +2,63 @@ package com.jglitter.web;
 
 import com.jglitter.domain.User;
 import com.jglitter.domain.Users;
-import com.jglitter.persistence.repo.UserRepository;
+import com.jglitter.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 /**
  * Encapsulates RESTful web service endpoints for working with users.
  */
-@Controller
+@Component
+@Path("/user")
 public class UserWebService {
 
-    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public UserWebService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     /**
-     * Creates a new user by issuing an HTTP POST to {host}/javainterview/user, returning a 200 on successful creation.
+     * Creates a new user by issuing an HTTP POST to {host}/javainterview/api/user, returning a 200 on successful creation.
      *
      * @param user the user to create, sent in the request body as XML
      * @return The user created, sent in the response body.
      */
     @Transactional
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public User createUser(@RequestBody User user) {
-        return userRepository.persist(user);
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
     /**
-     * Gets all the users by issuing an HTTP GET to {host}/javainterview/user, returning a 200 on successful retrieval.
+     * Gets all the users by issuing an HTTP GET to {host}/javainterview/api/user, returning a 200 on successful retrieval.
      *
      * @return All the users, sent in the response body as XML.
      */
     @Transactional(readOnly = true)
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @GET
+    @Produces("application/json")
     public Users getUsers() {
         return new Users(userRepository.findAll());
     }
 
     /**
-     * Deletes all the users by issuing an HTTP DELETE to {host}/javainterview/allusers, returning a 200 on successful deletion.
+     * Deletes all the users by issuing an HTTP DELETE to {host}/javainterview/api/allusers, returning a 200 on successful deletion.
      */
     @Transactional
-    @RequestMapping(value = "/allusers", method = RequestMethod.DELETE)
-    @ResponseStatus(HttpStatus.OK)
+    @DELETE
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }

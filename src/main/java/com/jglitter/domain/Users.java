@@ -1,33 +1,27 @@
 package com.jglitter.domain;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
- * A simple JAXB XML object that wraps zero to many users.
+ * A simple JSON object that wraps zero to many users.
  */
-@XmlRootElement
-public class Users {
+public class Users implements Iterable<User>{
 
-    @XmlElement
     private Collection<User> users = new ArrayList<User>();
 
     /**
      * Creates a new object.
      *
-     * @param users the users to be enapsulated
+     * @param users the users to be encapsulated
      */
-    public Users(Collection<User> users) {
-        this();
+    @JsonCreator
+    public Users(@JsonProperty Collection<User> users) {
         this.users = users;
-    }
-
-    /**
-     * Empty constructor necessary for JAXB.
-     */
-    protected Users() {
     }
 
     /**
@@ -36,5 +30,10 @@ public class Users {
      */
     public boolean contains(User user) {
         return users.contains(user);
+    }
+
+    @Override
+    public Iterator<User> iterator() {
+        return users.iterator();
     }
 }

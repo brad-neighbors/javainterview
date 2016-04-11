@@ -1,62 +1,83 @@
+buildscript {
+    ext {
+        springBootVersion = '1.3.3.RELEASE'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 apply plugin: 'java'
-apply plugin: 'war'
-apply plugin: 'idea'
-apply plugin: 'jetty'
+apply plugin: 'spring-boot'
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/release" }
 }
 
-def springVersion = '3.1.1.RELEASE'
-def hibernateVersion = '3.5.6-Final'
+configurations {
+    all*.exclude group: 'commons-logging'
+    all*.exclude group: 'junit'
+    all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+}
+
+ext {
+
+    springVersion = '4.2.5.RELEASE'
+    jerseyVersion = '2.22.2'
+    jettyClientVersion = '9.1.2.v20140210'
+    commonsLang3Version = '3.1'
+    jodaTimeVersion = '2.3'
+
+    testNgVersion = '6.8'
+    hamcrestVersion = '1.3'
+    guavaVersion = '18.0'
+    commonsLangVersion = '3.4'
+    springPluginCoreVersion = '1.0.0.RELEASE'
+    liquibaseVersion = '3.4.2'
+}
 
 dependencies {
 
-    compile group: 'log4j', name: 'log4j', version: '1.2.16'
-    compile group: 'org.springframework', name: 'spring-web', version: "$springVersion"
-    compile group: 'org.springframework', name: 'spring-webmvc', version: "$springVersion"
-    compile group: 'org.springframework', name: 'spring-jdbc', version: "$springVersion"
-    compile group: 'org.springframework', name: 'spring-test', version: "$springVersion"
-    compile group: 'org.springframework', name: 'spring-oxm', version: "$springVersion"
-    compile group: 'org.springframework', name: 'spring-orm', version: "$springVersion"
-    compile group: 'org.hibernate', name: 'hibernate-core', version: "$hibernateVersion"
-    compile group: 'org.hibernate', name: 'hibernate-annotations', version: "$hibernateVersion"
-    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: "$hibernateVersion"
-    compile group: 'org.liquibase', name: 'liquibase-core', version: '2.0.3'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.slf4j:slf4j-log4j12:1.7.5'
+    compile 'org.slf4j:jcl-over-slf4j:1.7.5'
+    compile 'org.slf4j:jul-to-slf4j:1.7.5'
+
+    compile "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+    compile "org.springframework.plugin:spring-plugin-core:${springPluginCoreVersion}"
+
+    compile "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}"
+    compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
+    compile "org.glassfish.jersey.ext:jersey-spring3:${jerseyVersion}"
+
+    compile group: 'org.liquibase', name: 'liquibase-core', version: liquibaseVersion
     compile group: 'com.h2database', name: 'h2', version: '1.3.165'
-    compile group: 'commons-fileupload', name: 'commons-fileupload', version: '1.2.1'
-    compile group: 'commons-io', name: 'commons-io', version: '2.1'
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.6.1'
-    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.6.1'
-    compile group: 'javassist', name: 'javassist', version: '3.12.1.GA'
-    compile group: 'cglib', name: 'cglib', version: '2.2'
-    compile group: 'cglib', name: 'cglib', version: '2.2'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.4+'
 
-    compile group: 'org.testng', name: 'testng', version: '6.3.1'
-
-    runtime group: 'javax.servlet', name: 'jstl', version: '1.2'
+    testCompile "org.testng:testng:${testNgVersion}"
+    testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+    testCompile group: 'org.springframework', name: 'spring-test', version: springVersion
 }
-
-tasks.test.useTestNG()
 
 test {
-    include 'com/jglitter/**'
+    useTestNG()
+    include(["**/*Tests.class", "**/*Test.class"])
+    exclude(["**/Abstract*.class", '**/*$*'])
 }
 
-def jettyStopPort = 8081
-
-jettyRunWar {
-    daemon true
-    stopPort jettyStopPort
-    stopKey 'stop'
+springBoot {
+    mainClass = 'com.jglitter.Application'
 }
-
-jettyStop {
-    stopPort jettyStopPort
-    stopKey 'stop'
-}
-
-test.dependsOn jettyRunWar
 

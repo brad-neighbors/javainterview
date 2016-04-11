@@ -1,5 +1,7 @@
 package com.jglitter.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -7,30 +9,25 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.UUID;
 
 /**
  * Encapsulates a tweet.
- * This entity can be persisted via JPA and marshalled over the wire as XML using JAXB.
+ * This entity can be persisted via JPA and marshalled over the wire as JSON.
  * Tweets are equal when their author and message are identical.
  */
 @Entity
-@XmlRootElement
 public class Tweet extends HasPrimaryKey {
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false, updatable = false)
-    @XmlElement
     private User author;
 
     @Column
-    @XmlElement
     private String message;
 
     @Column
-    @XmlElement
     private String uuid;
 
     /**
@@ -39,7 +36,8 @@ public class Tweet extends HasPrimaryKey {
      * @param author  the author of the tweet
      * @param message the message
      */
-    public Tweet(final User author, final String message) {
+    @JsonCreator
+    public Tweet(@JsonProperty("author") final User author, @JsonProperty("message") final String message) {
         this();
         this.author = author;
         this.message = message;
@@ -47,7 +45,7 @@ public class Tweet extends HasPrimaryKey {
     }
 
     /**
-     * Empty constructor necessary for persitence.
+     * Empty constructor necessary for persistence.
      */
     protected Tweet() {
     }

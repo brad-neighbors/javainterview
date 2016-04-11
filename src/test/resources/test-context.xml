@@ -3,22 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:jaxb-config.xml" />
-
     <bean id="httpClientFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory"/>
 
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <constructor-arg ref="httpClientFactory"/>
-
-        <property name="messageConverters">
-            <list>
-                <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
-                    <property name="marshaller" ref="jaxbMarshaller"/>
-                    <property name="unmarshaller" ref="jaxbMarshaller"/>
-                </bean>
-                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
-                <bean class="org.springframework.http.converter.StringHttpMessageConverter" />
-            </list>
-        </property>
     </bean>
 </beans>

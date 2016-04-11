@@ -1,17 +1,17 @@
 package com.jglitter.domain;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
- * A simple JAXB XML wrapping object that encapsulates zero to many tweets.
+ * A simple JSON wrapping object that encapsulates zero to many tweets.
  */
-@XmlRootElement
-public class Tweets {
+public class Tweets implements Iterable<Tweet> {
 
-    @XmlElement
     private Collection<Tweet> tweets = new ArrayList<Tweet>();
 
     /**
@@ -19,15 +19,9 @@ public class Tweets {
      *
      * @param tweets the tweets this wrapper encapsulates
      */
-    public Tweets(Collection<Tweet> tweets) {
-        this();
+    @JsonCreator
+    public Tweets(@JsonProperty Collection<Tweet> tweets) {
         this.tweets = tweets;
-    }
-
-    /**
-     * Empty constructor necessary for JAXB.
-     */
-    protected Tweets() {
     }
 
     /**
@@ -36,5 +30,10 @@ public class Tweets {
      */
     public boolean contains(Tweet tweet) {
         return tweets.contains(tweet);
+    }
+
+    @Override
+    public Iterator<Tweet> iterator() {
+        return tweets.iterator();
     }
 }
