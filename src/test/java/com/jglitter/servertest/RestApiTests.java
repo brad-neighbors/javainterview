@@ -15,6 +15,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -94,7 +95,7 @@ public class RestApiTests {
     @Test
     public void userCanAuthorATweet() {
         User author = webTarget.path("/user").request().post(json(new User("auth@or.com", "JohnDoe")), User.class);
-        Tweet tweet = webTarget.path("/tweet").request().post(json(new Tweet(author, "This is my first tweet!")), Tweet.class);
+        Tweet tweet = webTarget.path("/tweet").request().post(json(new Tweet(author, "This ")), Tweet.class);
         Tweets tweets = webTarget.path("/tweet/byAuthor/" + author.getUuid()).request().get(Tweets.class);
         assertTrue(tweets.contains(tweet), "All tweets by the author includes the new tweet.");
     }
@@ -107,5 +108,27 @@ public class RestApiTests {
             fail("Should have failed posting a tweet by an unknown author.");
         } catch (NotFoundException exception) {
         }
+    }
+
+    @Test
+    public void tweetNotLongerThan10Char() {
+        try {
+            User author = webTarget.path("/user").request().post(json(new User("auth@or.com", "JohnDoe")), User.class);
+            webTarget.path("/tweet").request().post(json(new Tweet(author, "This is my first tweet!")), Tweet.class);
+            fail("Should have less than 10 charactoers.");
+        } catch (BadRequestException exception) {
+        }
+    }
+
+    @Test
+    public void canSearchForTweetsByKeyword() {
+        User author = webTarget.path("/user").request().post(json(new User("auth@or.com", "JohnDoe")), User.class);
+        Tweet red = webTarget.path("/tweet").request().post(json(new Tweet(author, "Red")), Tweet.class);
+        Tweet blue = webTarget.path("/tweet").request().post(json(new Tweet(author, "Blue")), Tweet.class);
+        Tweet usa = webTarget.path("/tweet").request().post(json(new Tweet(author, "Red Blue")), Tweet.class);
+        Tweets tweets = webTarget.path("/tweet/byKeyword/" + "Red").request().get(Tweets.class);
+        assertTrue(tweets.contains(red));
+        assertTrue(tweets.contains(usa));
+        assertTrue(tweets.size() == 2, "Size of tweets");
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,6 +18,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Encapsulates RESTful web service endpoints for working with tweets.
@@ -49,6 +53,10 @@ public class TweetWebService {
         final User author = userRepository.findByUuid(tweet.getAuthor().getUuid());
         if (author == null) {
             throw new UserNotFoundException(tweet.getAuthor().getUuid());
+        }
+
+        if (tweet.getMessage().length() > 10 ) {
+            throw new BadRequestException("Tweet can't be longer than 10 characters");
         }
         return tweetRepository.save(new Tweet(author, tweet.getMessage()));
     }
@@ -84,5 +92,23 @@ public class TweetWebService {
             throw new UserNotFoundException(authorUuid);
         }
         return new Tweets(tweetRepository.findByAuthor(user));
+    }
+
+    @Transactional(readOnly = true)
+    @GET
+    @Path("/byKeyword/{searchTerm}")
+    @Produces("application/json")
+    public Tweets findTweetsByKeyword(@PathParam("searchTerm") String searchTerm) {
+        Collection<Tweet> tweets = tweetRepository.findAll();
+        Collection<Tweet> result = new ArrayList<Tweet>();
+
+
+        for(Tweet eachTweet : tweets){
+            if(eachTweet.getMessage().contains(searchTerm)){
+                result.add(eachTweet);
+            }
+        }
+
+        return new Tweets(result);
     }
 }

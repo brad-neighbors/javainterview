@@ -36,4 +36,8 @@ public class Tweets implements Iterable<Tweet> {
     public Iterator<Tweet> iterator() {
         return tweets.iterator();
     }
+
+    public int size() {
+        return tweets.size();
+    }
 }

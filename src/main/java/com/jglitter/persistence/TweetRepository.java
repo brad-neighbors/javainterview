@@ -2,6 +2,7 @@ package com.jglitter.persistence;
 
 import com.jglitter.domain.Tweet;
 import com.jglitter.domain.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,7 @@ public interface TweetRepository extends CrudRepository<Tweet, Integer> {
      * @return The tweet, or <code>null</code> if not found.
      */
     Tweet findByUuid(String uuid);
+
+    @Query("select u from Tweet u")
+    Collection<Tweet> findAll();
 }
