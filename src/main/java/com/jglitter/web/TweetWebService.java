@@ -17,7 +17,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,5 +89,23 @@ public class TweetWebService {
             throw new UserNotFoundException(authorUuid);
         }
         return new Tweets(tweetRepository.findByAuthor(user.get()));
+    }
+
+    /**
+     * Finds all tweets matching the search term.
+     *
+     * @param searchTerm the word(s)? to search for
+     * @return All the matching tweets.
+     */
+    @Transactional(readOnly = true)
+    @GET
+    @Path("/search")
+    @Produces("application/json")
+    public Tweets search(@QueryParam("term") String searchTerm) {
+        // Implement an in-memory pure java search by first loading all tweets from the database.
+        Collection<Tweet> all = tweetRepository.findAll();
+        // TODO: implement an in-memory search
+
+        return new Tweets(all);
     }
 }
