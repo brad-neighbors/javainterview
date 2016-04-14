@@ -10,10 +10,12 @@ import org.springframework.test.context.testng.AbstractTransactionalTestNGSpring
 import org.testng.annotations.Test;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
@@ -23,7 +25,7 @@ import static org.testng.Assert.fail;
  */
 @Test
 @ContextConfiguration(classes = {Config.class})
-public class JpaUserRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class UserRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,9 +35,11 @@ public class JpaUserRepositoryTest extends AbstractTransactionalTestNGSpringCont
         User johnDoe = userRepository.save(new User("john@doe.com", "John Doe"));
         assertNotNull(johnDoe.getId(), "Newly persisted user did not have primary key.");
 
-        User retrieved = userRepository.findByUuid(johnDoe.getUuid());
-        assertEquals(retrieved, johnDoe, "Retrieved user did not match newly inserted user.");
-    }
+        Optional<User> retrieved = userRepository.findByUuid(johnDoe.getUuid());
+        assertEquals(retrieved.get().getEmail(), "john@doe.com", "Email address");
+        assertEquals(retrieved.get().getName(), "John Doe", "Name");
+        assertEquals(retrieved.get().getUuid(), johnDoe.getUuid(), "UUID");
+   }
 
     @Test
     public void canFindAllUsers() {
@@ -50,9 +54,15 @@ public class JpaUserRepositoryTest extends AbstractTransactionalTestNGSpringCont
     public void canFindUserByUuid() {
         final User johnDoe = userRepository.save(new User("john@doe.com", "John Doe"));
         final User janeDoe = userRepository.save(new User("jane@doe.com", "Jane Doe"));
-        assertTrue(johnDoe.equals(userRepository.findByUuid(johnDoe.getUuid())));
-        assertTrue(janeDoe.equals(userRepository.findByUuid(janeDoe.getUuid())));
-        assertNull(userRepository.findByUuid("NotFound"), "Mistakenly found a user by uuid not in database");
+
+        Optional<User> johnDoeRetrieved = userRepository.findByUuid(johnDoe.getUuid());
+        assertTrue(johnDoe.equals(johnDoeRetrieved.get()), "Found John Doe");
+
+        Optional<User> janeDoeRetrieved = userRepository.findByUuid(janeDoe.getUuid());
+        assertTrue(janeDoe.equals(janeDoeRetrieved.get()), "Found Jane Doe");
+
+        assertFalse(userRepository.findByUuid(UUID.randomUUID()).isPresent(),
+                "Mistakenly found a user by uuid not in database");
     }
 
     @Test
@@ -63,8 +73,6 @@ public class JpaUserRepositoryTest extends AbstractTransactionalTestNGSpringCont
         try {
             userRepository.save(new User("john@doe.com", "Jim Doe"));
             fail("Should have disallowed persisting second user with duplicated email");
-        } catch (Exception e){
-
-        }
+        } catch (Exception e){}
     }
 }

@@ -2,6 +2,8 @@ package com.jglitter.domain;
 
 import javax.ws.rs.NotFoundException;
 
+import java.util.UUID;
+
 import static java.lang.String.format;
 
 /**
@@ -10,14 +12,14 @@ import static java.lang.String.format;
  */
 public class UserNotFoundException extends NotFoundException {
 
-    private final String userId;
+    private final UUID userId;
 
     /**
      * Creates a new exception.
      *
      * @param userUuid the UUID of the user that was not found
      */
-    public UserNotFoundException(final String userUuid) {
+    public UserNotFoundException(final UUID userUuid) {
         this.userId = userUuid;
     }
 

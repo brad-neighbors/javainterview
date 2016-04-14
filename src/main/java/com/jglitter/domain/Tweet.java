@@ -28,7 +28,7 @@ public class Tweet extends HasPrimaryKey {
     private String message;
 
     @Column
-    private String uuid;
+    private UUID uuid;
 
     /**
      * Creates a tweet.
@@ -41,7 +41,7 @@ public class Tweet extends HasPrimaryKey {
         this();
         this.author = author;
         this.message = message;
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = UUID.randomUUID();
     }
 
     /**
@@ -72,7 +72,7 @@ public class Tweet extends HasPrimaryKey {
         return message;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 }

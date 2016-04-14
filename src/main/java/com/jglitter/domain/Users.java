@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * A simple JSON object that wraps zero to many users.
@@ -31,6 +33,7 @@ public class Users implements Iterable<User>{
     public boolean contains(User user) {
         return users.contains(user);
     }
+
 
     @Override
     public Iterator<User> iterator() {

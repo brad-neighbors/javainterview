@@ -16,14 +16,14 @@ import java.util.UUID;
 @Entity
 public class User extends HasPrimaryKey {
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column
     private String name;
 
-    @Column
-    private String uuid;
+    @Column(unique = true)
+    private UUID uuid;
 
     /**
      * Creates a new user.
@@ -36,7 +36,7 @@ public class User extends HasPrimaryKey {
         this();
         this.email = email;
         this.name = name;
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = UUID.randomUUID();
     }
 
     /**
@@ -45,24 +45,15 @@ public class User extends HasPrimaryKey {
     protected User() {
     }
 
-    /**
-     * @return The user's email address.
-     */
     public String getEmail() {
         return email;
     }
 
-    /**
-     * @return The name the user chose.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @return The user's unique ID, used as an identifier at a business level and web services.
-     */
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 

@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Specifies persistence operations for users.
@@ -19,8 +21,13 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      * @param uuid the user's UUID identifier.
      * @return The found user, or <code>null</code> when not found.
      */
-    User findByUuid(String uuid);
+    Optional<User> findByUuid(UUID uuid);
 
+    /**
+     * Finds all the users.
+     *
+     * @return All the users in the database.
+     */
     @Query("select u from User u")
     Collection<User> findAll();
 }

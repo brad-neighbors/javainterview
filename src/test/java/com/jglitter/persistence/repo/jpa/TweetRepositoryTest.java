@@ -20,7 +20,7 @@ import static org.testng.Assert.*;
  */
 @Test
 @ContextConfiguration(classes = {Config.class})
-public class JpaTweetRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
+public class TweetRepositoryTest extends AbstractTransactionalTestNGSpringContextTests {
 
     @Autowired
     private TweetRepository tweetRepo;
@@ -31,12 +31,13 @@ public class JpaTweetRepositoryTest extends AbstractTransactionalTestNGSpringCon
     @Test
     public void canPersistATweet() {
         User author = userRepo.save(new User("jane@doe.com", "Jane Doe"));
-
         Tweet tweet = tweetRepo.save(new Tweet(author, "I have a common name"));
         assertNotNull(tweet.getId(), "Persisted tweet was not assigned primary key.");
 
         Tweet retrieved = tweetRepo.findOne(tweet.getId());
-        assertEquals(retrieved, tweet, "Tweet retrieved by primary key not same as persisted tweet");
+        assertEquals(retrieved.getAuthor(), author, "Tweet author");
+        assertEquals(retrieved.getMessage(), "I have a common name", "Tweet message");
+        assertEquals(retrieved.getUuid(), tweet.getUuid(), "Tweet UUID");
     }
 
     @Test

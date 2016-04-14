@@ -18,6 +18,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import java.util.Optional;
+import java.util.UUID;
+
 /**
  * Encapsulates RESTful web service endpoints for working with tweets.
  */
@@ -46,11 +49,11 @@ public class TweetWebService {
     @Consumes("application/json")
     @Produces("application/json")
     public Tweet createTweet(Tweet tweet) {
-        final User author = userRepository.findByUuid(tweet.getAuthor().getUuid());
-        if (author == null) {
+        final Optional<User> author = userRepository.findByUuid(tweet.getAuthor().getUuid());
+        if (!author.isPresent()) {
             throw new UserNotFoundException(tweet.getAuthor().getUuid());
         }
-        return tweetRepository.save(new Tweet(author, tweet.getMessage()));
+        return tweetRepository.save(new Tweet(author.get(), tweet.getMessage()));
     }
 
     /**
@@ -61,10 +64,10 @@ public class TweetWebService {
     @Transactional
     @DELETE
     @Path("/{tweetUuid}")
-    public void deleteTweet(@PathParam("tweetUuid") String tweetUuid) {
-        Tweet tweetToDelete = tweetRepository.findByUuid(tweetUuid);
-        if (tweetToDelete != null) {
-            tweetRepository.delete(tweetToDelete);
+    public void deleteTweet(@PathParam("tweetUuid") UUID tweetUuid) {
+        Optional<Tweet> tweetToDelete = tweetRepository.findByUuid(tweetUuid);
+        if (!tweetToDelete.isPresent()) {
+            tweetRepository.delete(tweetToDelete.get());
         }
     }
 
@@ -78,11 +81,11 @@ public class TweetWebService {
     @GET
     @Path("/byAuthor/{authorUuid}")
     @Produces("application/json")
-    public Tweets findTweetsAuthoredBy(@PathParam("authorUuid") String authorUuid) {
-        final User user = userRepository.findByUuid(authorUuid);
-        if (user == null) {
+    public Tweets findTweetsAuthoredBy(@PathParam("authorUuid") UUID authorUuid) {
+        final Optional<User> user = userRepository.findByUuid(authorUuid);
+        if (!user.isPresent()) {
             throw new UserNotFoundException(authorUuid);
         }
-        return new Tweets(tweetRepository.findByAuthor(user));
+        return new Tweets(tweetRepository.findByAuthor(user.get()));
     }
 }

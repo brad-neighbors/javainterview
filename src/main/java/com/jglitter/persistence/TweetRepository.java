@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Specifies persistence operations for tweets.
@@ -25,7 +27,7 @@ public interface TweetRepository extends CrudRepository<Tweet, Integer> {
      * Finds a tweet by its UUID.
      *
      * @param uuid the tweet uuid identifier
-     * @return The tweet, or <code>null</code> if not found.
+     * @return The optional tweet.
      */
-    Tweet findByUuid(String uuid);
+    Optional<Tweet> findByUuid(UUID uuid);
 }
