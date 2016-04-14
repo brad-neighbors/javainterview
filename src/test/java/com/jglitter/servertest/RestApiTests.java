@@ -81,21 +81,21 @@ public class RestApiTests {
 
     @AfterMethod(alwaysRun = true)
     public void deleteAllUsers() {
-        webTarget.path("/user").request().delete();
+        webTarget.path("/users").request().delete();
     }
 
     @Test
     public void canCreateAUser() {
-        User johnDoe = webTarget.path("/user").request().post(json(new User("john@doe.com", "JohnDoe")), User.class);
-        Users allUsers = webTarget.path("/user").request().get(Users.class);
+        User johnDoe = webTarget.path("/users").request().post(json(new User("john@doe.com", "JohnDoe")), User.class);
+        Users allUsers = webTarget.path("/users").request().get(Users.class);
         assertTrue(allUsers.contains(johnDoe), "All users didn't include newly added user.");
     }
 
     @Test
     public void userCanAuthorATweet() {
-        User author = webTarget.path("/user").request().post(json(new User("auth@or.com", "JohnDoe")), User.class);
-        Tweet tweet = webTarget.path("/tweet").request().post(json(new Tweet(author, "This is my first tweet!")), Tweet.class);
-        Tweets tweets = webTarget.path("/tweet/byAuthor/" + author.getUuid()).request().get(Tweets.class);
+        User author = webTarget.path("/users").request().post(json(new User("auth@or.com", "JohnDoe")), User.class);
+        Tweet tweet = webTarget.path("/tweets").request().post(json(new Tweet(author, "This is my first tweet!")), Tweet.class);
+        Tweets tweets = webTarget.path("/tweets/byAuthor/" + author.getUuid()).request().get(Tweets.class);
         assertTrue(tweets.contains(tweet), "All tweets by the author includes the new tweet.");
     }
 
@@ -103,7 +103,7 @@ public class RestApiTests {
     public void unknownUserCannotAuthorATweet() {
         User unknownAuthor = new User("sneaky@bastard.com", "sneaky");
         try {
-            webTarget.path("/tweet").request().post(json(new Tweet(unknownAuthor, "This is my first tweet!")), Tweet.class);
+            webTarget.path("/tweets").request().post(json(new Tweet(unknownAuthor, "This is my first tweet!")), Tweet.class);
             fail("Should have failed posting a tweet by an unknown author.");
         } catch (NotFoundException exception) {
         }

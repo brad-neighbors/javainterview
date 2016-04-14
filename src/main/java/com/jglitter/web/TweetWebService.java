@@ -27,7 +27,7 @@ import java.util.UUID;
  * Encapsulates RESTful web service endpoints for working with tweets.
  */
 @Component
-@Path("/tweet")
+@Path("/tweets")
 public class TweetWebService {
 
     private TweetRepository tweetRepository;
@@ -40,7 +40,7 @@ public class TweetWebService {
     }
 
     /**
-     * Creates a new tweet by issuing an HTTP POST to {host}/javainterview/api/tweet, returning a 200 on a successful creation.
+     * Creates a new tweet by issuing an HTTP POST to {host}/api/tweets, returning a 200 on a successful creation.
      *
      * @param tweet the tweet included in the request body.
      * @return The created tweet, marshalled into the response body.
@@ -59,7 +59,7 @@ public class TweetWebService {
     }
 
     /**
-     * Deletes a tweet by issuing an HTTP DELETE to {host}/javainterview/api/tweet/{tweetUuid}, return a 200 on a successful deletion.
+     * Deletes a tweet by issuing an HTTP DELETE to {host}/api/tweets/{tweetUuid}, return a 200 on a successful deletion.
      *
      * @param tweetUuid the UUID of the tweet to delete.
      */
@@ -74,7 +74,7 @@ public class TweetWebService {
     }
 
     /**
-     * Finds all the tweets authored by the specified user, by issing an HTTP GET to {host}/javainterview/api/author/{authorUuid}/tweets.
+     * Finds all the tweets authored by the specified user, by issuing an HTTP GET to {host}/api/tweets/byAuthor/{authorUuid}.
      *
      * @param authorUuid the UUID of the user who authored the tweets
      * @return All the user's tweets, marshalled into the response body
@@ -92,7 +92,7 @@ public class TweetWebService {
     }
 
     /**
-     * Finds all tweets matching the search term.
+     * Finds all tweets matching the search term by issuing an HTTP GET to {host}/api/tweets/search?term={searchTerm(s)}.
      *
      * @param searchTerm the word(s)? to search for
      * @return All the matching tweets.
